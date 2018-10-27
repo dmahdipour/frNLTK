@@ -3,6 +3,7 @@ from tqdm import tqdm
 
 import normalizer
 import tokenizer
+import tokenCounter
 
 
 myCorpusPath = "ahrarnews_corpus/"
@@ -17,3 +18,4 @@ for filesNum in tqdm(range(len(txtFileList))):
 
 filesWordNormalize = normalizer.my_normalizing(filesContent)
 filesWordTokenize = tokenizer.my_word_tokenize(filesWordNormalize)
+filesTokenCount = tokenCounter.my_token_conter(filesWordTokenize)
