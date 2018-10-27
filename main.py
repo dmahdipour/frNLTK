@@ -7,10 +7,13 @@ import tokenCounter
 import dicSorter
 import fileWriter
 import fileReader
+import tf_idf_dicCreator
 
 
 myCorpusPath = "ahrarnews_corpus/"
 myTokenizedPath = "tokenized/"
+myTF_IDF_path = "tf_idf/"
+myTF_path = "tf/"
 
 
 txtFileList = glob.glob(f'{myCorpusPath}*.txt')
@@ -38,5 +41,7 @@ for fileNum in tqdm(range(len(txtFileList))):
     fileName = txtFileList[fileNum].split(myCorpusPath)
     fileName = fileName[1].split(".txt")
 
-
+    file_tf_idf = tf_idf_dicCreator.my_TF_IDF(filesTokenCount, sorted_dic)
+    file_tf = tf_idf_dicCreator.my_TF(filesTokenCount, sorted_dic)
+    
     fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
