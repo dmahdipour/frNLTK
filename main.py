@@ -26,4 +26,17 @@ filesTokenCount = tokenCounter.my_token_conter(filesWordTokenize)
 filesSorted_dic = dicSorter.dic_key_sort(filesTokenCount, 0)
 fileWriter.my_file_writer(myTokenizedPath+"0_myIndexList.tok", filesSorted_dic)
 
+# one_By_One
+for fileNum in tqdm(range(len(txtFileList))):    
+    fileContent = fileReader.my_file_reader(txtFileList[fileNum], "UTF-8")
+    
+    wordNormalize = normalizer.my_normalizing(fileContent)
+    wordTokenize = tokenizer.my_word_tokenize(wordNormalize)
+    tokenCount = tokenCounter.my_token_conter(wordTokenize)    
+    sorted_dic = dicSorter.dic_key_sort(tokenCount, 0)
+   
+    fileName = txtFileList[fileNum].split(myCorpusPath)
+    fileName = fileName[1].split(".txt")
 
+
+    fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
