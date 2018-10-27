@@ -43,5 +43,7 @@ for fileNum in tqdm(range(len(txtFileList))):
 
     file_tf_idf = tf_idf_dicCreator.my_TF_IDF(filesTokenCount, sorted_dic)
     file_tf = tf_idf_dicCreator.my_TF(filesTokenCount, sorted_dic)
-    
+
     fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
+    fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
+    fileWriter.my_file_writer(myTF_IDF_path+fileName[0]+".TfIdf", file_tf_idf)
