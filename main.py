@@ -8,6 +8,7 @@ import dicSorter
 import fileWriter
 import fileReader
 import tf_idf_dicCreator
+import vectorSimilarity
 
 
 myCorpusPath = "ahrarnews_corpus/"
@@ -47,3 +48,7 @@ for fileNum in tqdm(range(len(txtFileList))):
     fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
     fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
     fileWriter.my_file_writer(myTF_IDF_path+fileName[0]+".TfIdf", file_tf_idf)
+
+vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
+print(vecSim)
+
