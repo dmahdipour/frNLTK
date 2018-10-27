@@ -52,3 +52,5 @@ for fileNum in tqdm(range(len(txtFileList))):
 vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
 print(vecSim)
 
+vecSim = vectorSimilarity.cos_sim_vectors(myTF_IDF_path+"01"+".TfIdf", myTF_IDF_path+"02"+".TfIdf")
+print(vecSim)
