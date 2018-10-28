@@ -1,10 +1,6 @@
 import glob
 from tqdm import tqdm
 
-import normalizer
-import tokenizer
-import tokenCounter
-import dicSorter
 import fileWriter
 import fileReader
 import tf_idf_dicCreator
