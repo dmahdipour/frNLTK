@@ -51,8 +51,16 @@ for fileNum in tqdm(range(len(txtFileList))):
     fileWriter.my_file_line_writer(myTF_IDF_path+fileName[0]+".TfIdf", row_tf_idf)
 
 
-vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
-print(vecSim)
-
-vecSim = vectorSimilarity.cos_sim_vectors(myTF_IDF_path+"01"+".TfIdf", myTF_IDF_path+"02"+".TfIdf")
-print(vecSim)
+for fileNum in range(len(txtFileList)):
+    doc1 = "01"
+    
+    fileName = txtFileList[fileNum].split(myCorpusPath)
+    fileName = fileName[1].split(".txt")
+    
+    vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+doc1+".TF", myTF_path+fileName[0]+".TF")
+    print("similarity Doc01 and Doc"+fileName[0]+" By Just TF is: ",vecSim)
+    
+    vecSim = vectorSimilarity.cos_sim2_vectors(myTF_IDF_path+doc1+".TfIdf", myTF_IDF_path+fileName[0]+".TfIdf")
+    print("similarity Doc01 and Doc"+fileName[0]+" By TF_IDF is: ",vecSim)
+    print("=================================")
+  
