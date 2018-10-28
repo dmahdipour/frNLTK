@@ -16,29 +16,28 @@ myTF_path = "tf/"
 
 txtFileList = glob.glob(f'{myCorpusPath}*.txt')
 
-# all_in_1
-filesContent = ""
-for filesNum in tqdm(range(len(txtFileList))):
-    filesContent = filesContent + fileReader.my_file_reader(txtFileList[filesNum], "UTF-8") + "\n"  
+### corpus vocab creator
+corpusContent = ""
+for corpusNum in tqdm(range(len(txtFileList))):
+    corpusContent = corpusContent + fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8") + "\n" 
 
-corpusVocabC = NTCS.n_t_c_s(corpusContent)
-fileWriter.my_file_writer(myTokenizedPath+"0_myIndexList.tok", filesSorted_dic)
+documrntsMatrix = list(corpusVocabC.values())
+fileWriter.my_file_writer(myTokenizedPath+"0_corpusVocabC.voc", corpusVocabC)
 
-# one_By_One
+### tf creator
 for fileNum in tqdm(range(len(txtFileList))):    
     fileContent = fileReader.my_file_reader(txtFileList[fileNum], "UTF-8")
-    
+
     sorted_dic = NTCS.n_t_c_s(fileContent)
-   
+    
     fileName = txtFileList[fileNum].split(myCorpusPath)
     fileName = fileName[1].split(".txt")
-
-    file_tf_idf = tf_idf_dicCreator.my_TF_IDF(filesTokenCount, sorted_dic)
-    file_tf = tf_idf_dicCreator.my_TF(filesTokenCount, sorted_dic)
-
+    
     fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
+
+    file_tf = tf_idf_dicCreator.my_TF(corpusVocabC, sorted_dic)
+    documrntsMatrix = np.vstack((documrntsMatrix, list(file_tf.values())))
     fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
-    fileWriter.my_file_writer(myTF_IDF_path+fileName[0]+".TfIdf", file_tf_idf)
 
 vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
 print(vecSim)
