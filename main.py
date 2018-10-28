@@ -40,6 +40,9 @@ for fileNum in tqdm(range(len(txtFileList))):
     documrntsMatrix = np.vstack((documrntsMatrix, list(file_tf.values())))
     fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
 
+myDF = tf_idf_dicCreator.my_DF(documrntsMatrix)
+file_tf_idf = tf_idf_dicCreator.my_TF_IDF(documrntsMatrix, myDF)
+
 vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
 print(vecSim)
 
