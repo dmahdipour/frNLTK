@@ -8,22 +8,22 @@ import tf_idf_dicCreator
 import vectorSimilarity
 import NTCS
 
-
-myCorpusPath = "ahrarnews_corpus/"
 myTokenizedPath = "tokenized/"
 myTF_IDF_path = "tf_idf/"
 myTF_path = "tf/"
-
+myCorpusPath = "ahrarnews_corpus/"
 
 txtFileList = glob.glob(f'{myCorpusPath}*.txt')
 
 ### corpus vocab creator
 corpusContent = ""
 for corpusNum in tqdm(range(len(txtFileList))):
-    corpusContent = corpusContent + fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8") + "\n" 
+    corpusContent = corpusContent + fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8") + "\n"         
 
+corpusVocabC = NTCS.n_t_c_s(corpusContent)
 documrntsMatrix = list(corpusVocabC.values())
 fileWriter.my_file_writer(myTokenizedPath+"0_corpusVocabC.voc", corpusVocabC)
+
 
 ### tf creator
 for fileNum in tqdm(range(len(txtFileList))):    
@@ -39,9 +39,10 @@ for fileNum in tqdm(range(len(txtFileList))):
     file_tf = tf_idf_dicCreator.my_TF(corpusVocabC, sorted_dic)
     documrntsMatrix = np.vstack((documrntsMatrix, list(file_tf.values())))
     fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
-
+  
 myDF = tf_idf_dicCreator.my_DF(documrntsMatrix)
 file_tf_idf = tf_idf_dicCreator.my_TF_IDF(documrntsMatrix, myDF)
+
 
 for fileNum in tqdm(range(len(txtFileList))):  
     row_tf_idf =file_tf_idf[fileNum,:]
@@ -49,10 +50,10 @@ for fileNum in tqdm(range(len(txtFileList))):
     fileName = txtFileList[fileNum].split(myCorpusPath)
     fileName = fileName[1].split(".txt")
     fileWriter.my_file_line_writer(myTF_IDF_path+fileName[0]+".TfIdf", row_tf_idf)
-
-
+ 
 for fileNum in range(len(txtFileList)):
     doc1 = "01"
+    #doc2 = "10"  
     
     fileName = txtFileList[fileNum].split(myCorpusPath)
     fileName = fileName[1].split(".txt")
@@ -63,4 +64,4 @@ for fileNum in range(len(txtFileList)):
     vecSim = vectorSimilarity.cos_sim2_vectors(myTF_IDF_path+doc1+".TfIdf", myTF_IDF_path+fileName[0]+".TfIdf")
     print("similarity Doc01 and Doc"+fileName[0]+" By TF_IDF is: ",vecSim)
     print("=================================")
-  
+    
