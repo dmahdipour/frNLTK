@@ -1,5 +1,6 @@
 import glob
 from tqdm import tqdm
+import numpy as np
 
 import fileWriter
 import fileReader
