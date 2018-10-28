@@ -43,6 +43,14 @@ for fileNum in tqdm(range(len(txtFileList))):
 myDF = tf_idf_dicCreator.my_DF(documrntsMatrix)
 file_tf_idf = tf_idf_dicCreator.my_TF_IDF(documrntsMatrix, myDF)
 
+for fileNum in tqdm(range(len(txtFileList))):  
+    row_tf_idf =file_tf_idf[fileNum,:]
+    
+    fileName = txtFileList[fileNum].split(myCorpusPath)
+    fileName = fileName[1].split(".txt")
+    fileWriter.my_file_line_writer(myTF_IDF_path+fileName[0]+".TfIdf", row_tf_idf)
+
+
 vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+"01"+".TF", myTF_path+"02"+".TF")
 print(vecSim)
 
