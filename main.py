@@ -2,12 +2,18 @@ import glob
 from tqdm import tqdm
 import numpy as np
 
+import FolderDir_ExChk
 import fileWriter
 import fileReader
 import tf_idf_dicCreator
 import vectorSimilarity
 import NTCS
 
+
+
+FolderDir_ExChk.macDirExistCreate('tf')
+FolderDir_ExChk.macDirExistCreate('tf_idf')
+FolderDir_ExChk.macDirExistCreate('tokenized')
 myTokenizedPath = "tokenized/"
 myTF_IDF_path = "tf_idf/"
 myTF_path = "tf/"
