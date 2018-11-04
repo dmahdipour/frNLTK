@@ -6,7 +6,7 @@ import stopwordRemover
 
 
 def n_t_c_s(fileContent):
-    fileContent = normalizer.my_normalizing(fileContent)
+    fileContent = normalizer.my_tiny_normalizing(fileContent)
     fileContent = stopwordRemover.remove_proNone(fileContent)
     fileContent = stopwordRemover.remove_proNone(fileContent)
     fileContent = tokenizer.my_word_tokenize(fileContent)
