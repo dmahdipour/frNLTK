@@ -19,7 +19,7 @@ if platform.system() == 'windows':
     myTokenizedPath = "tokenized\\"
     myTF_IDF_path = "tf_idf\\"
     myTF_path = "tf\\"
-    myCorpusPath = "ahrarnews_corpus\\"
+    myCorpusPath = "irna_corpus\\"
 else:    
     # Set dir path for mac OS
     FolderDir_ExChk.macDirExistCreate('tf')
@@ -28,7 +28,7 @@ else:
     myTokenizedPath = "tokenized/"
     myTF_IDF_path = "tf_idf/"
     myTF_path = "tf/"
-    myCorpusPath = "ahrarnews_corpus/"
+    myCorpusPath = "irna_corpus/"
     
 
 txtFileList = glob.glob(f'{myCorpusPath}*.txt')
