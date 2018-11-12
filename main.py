@@ -3,14 +3,30 @@ import platform
 import glob
 from tqdm import tqdm
 import numpy as np
+import datetime
+import pickle
 
+import normalizer
+import tokenizer
+import tokenCounter
+import stopwordRemover
 import FolderDir_ExChk
-import fileWriter
 import fileReader
+
+
+"جداسازی کلمات فارسی از انگلیسی"#
+
+
+
+'''
+
+import fileWriter
 import tf_idf_dicCreator
 import vectorSimilarity
 import NTCS
+'''
 
+startTime = datetime.datetime.now()
 
 if platform.system() == 'windows':    
     # Set dir path for windows OS       
@@ -34,6 +50,29 @@ else:
 
 txtFileList = sorted(glob.glob(f'{myCorpusPath}*.txt'), key=os.path.basename)
 
+corpusContentJson = []
+corpusTokens = {}
+for corpusNum in tqdm(range(len(txtFileList))):
+    #fileContent = fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8")
+    fileContent = fileReader.my_Json_reader(txtFileList[corpusNum], "UTF-8", 'text')
+    fileContent = normalizer.my_tiny_normalizing(fileContent)
+    fileContent = stopwordRemover.remove_proNone(fileContent)
+    fileContent = stopwordRemover.remove_regularWords(fileContent)
+    fileContent = tokenizer.my_word_tokenize(fileContent)
+    fileContent = tokenCounter.my_token_conter(fileContent)
+    corpusContentJson.append(fileContent)
+    
+    corpusTokens = tokenCounter.myAll_token_conter(corpusTokens, fileContent)
+
+
+
+
+
+
+
+
+
+'''
 ### corpus vocab creator
 corpusContent = ""
 for corpusNum in tqdm(range(len(txtFileList))):
@@ -83,4 +122,13 @@ for fileNum in range(len(txtFileList)):
     vecSim = vectorSimilarity.cos_sim2_vectors(myTF_IDF_path+doc1+".TfIdf", myTF_IDF_path+fileName[0]+".TfIdf")
     print("similarity Doc01 and Doc"+fileName[0]+" By TF_IDF is: ",vecSim)
     print("=================================")
+
+'''
+endTime = datetime.datetime.now()
+totalTime = endTime - startTime
+
+print(" --- FINISHED in ",totalTime.total_seconds()," seconds --- ")
+
+with open('objs.pkl', 'wb') as f:
+    pickle.dump([corpusContentJson, corpusTokens],f)
     
