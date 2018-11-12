@@ -1,3 +1,4 @@
+import os
 import platform
 import glob
 from tqdm import tqdm
@@ -31,7 +32,7 @@ else:
     myCorpusPath = "irna_corpus/"
     
 
-txtFileList = glob.glob(f'{myCorpusPath}*.txt')
+txtFileList = sorted(glob.glob(f'{myCorpusPath}*.txt'), key=os.path.basename)
 
 ### corpus vocab creator
 corpusContent = ""
@@ -70,7 +71,7 @@ for fileNum in tqdm(range(len(txtFileList))):
     fileWriter.my_file_line_writer(myTF_IDF_path+fileName[0]+".TfIdf", row_tf_idf)
  
 for fileNum in range(len(txtFileList)):
-    doc1 = "01"
+    doc1 = "1"
     #doc2 = "10"  
     
     fileName = txtFileList[fileNum].split(myCorpusPath)
