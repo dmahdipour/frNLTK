@@ -55,8 +55,8 @@ def remove_proNone(text):
  
         
     for key in tqdm(proNoneList):
-        reText = r'([\s])(['+key+']+)([\W\d\s]+)'
-        text = re.sub(reText, r' \3', text)
+        reText = r'\b'+key+r'\b'
+        text = re.sub(reText, r'', text)
         
     return text
 
@@ -276,7 +276,7 @@ def remove_regularWords(text):
     ]
     
     for key in tqdm(regularWordList):
-        reText = r'([\s])(['+key+']+)([\W\d\s]+)'
-        text = re.sub(reText, r' \3', text)
+        reText = r'\b'+key+r'\b'
+        text = re.sub(reText, r'', text)
         
     return text
