@@ -14,12 +14,12 @@ def my_token_conter(tokens):
 
 
 
-def myAll_token_conter(dic, tokens):
+def my_DF_conter(dic, tokens):
     for wordTkn in tqdm(tokens):
-        tknTokensCount = tokens.get(wordTkn)
+        #tknTokensCount = tokens.get(wordTkn)
         if wordTkn in dic:
             tknDicCount = dic.get(wordTkn)
-            dic.update({wordTkn:tknDicCount+tknTokensCount})
+            dic.update({wordTkn:tknDicCount+1})
         else:
-            dic[wordTkn] = tknTokensCount
+            dic[wordTkn] = 1
     return dic
