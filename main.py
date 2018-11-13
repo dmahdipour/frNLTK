@@ -2,7 +2,6 @@ import os
 import platform
 import glob
 from tqdm import tqdm
-import numpy as np
 import datetime
 import pickle
 
@@ -12,19 +11,10 @@ import tokenCounter
 import stopwordRemover
 import FolderDir_ExChk
 import fileReader
-
-
-"جداسازی کلمات فارسی از انگلیسی"#
-
-
-
-'''
-
-import fileWriter
 import tf_idf_dicCreator
 import vectorSimilarity
-import NTCS
-'''
+
+
 
 startTime = datetime.datetime.now()
 
@@ -49,11 +39,12 @@ else:
     
 
 txtFileList = sorted(glob.glob(f'{myCorpusPath}*.txt'), key=os.path.basename)
+corpusLen = len(txtFileList)
+corpusLen = 5000
 
 corpusContentJson = []
 corpusTokens = {}
-for corpusNum in tqdm(range(len(txtFileList))):
-    #fileContent = fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8")
+for corpusNum in tqdm(range(corpusLen)):
     fileContent = fileReader.my_Json_reader(txtFileList[corpusNum], "UTF-8", 'text')
     fileContent = normalizer.my_tiny_normalizing(fileContent)
     fileContent = stopwordRemover.remove_proNone(fileContent)
@@ -62,73 +53,41 @@ for corpusNum in tqdm(range(len(txtFileList))):
     fileContent = tokenCounter.my_token_conter(fileContent)
     corpusContentJson.append(fileContent)
     
-    corpusTokens = tokenCounter.myAll_token_conter(corpusTokens, fileContent)
+    corpusTokens = tokenCounter.my_DF_conter(corpusTokens, fileContent)
 
 
 
+corpusTfJson = []
+for rowKeys in tqdm(range(corpusLen)):
+    corpusTfJson.append(tf_idf_dicCreator.my_TF(corpusTokens, dict(corpusContentJson[rowKeys])))
 
-
-
-
-
-
-'''
-### corpus vocab creator
-corpusContent = ""
-for corpusNum in tqdm(range(len(txtFileList))):
-    corpusContent = corpusContent + fileReader.my_file_reader(txtFileList[corpusNum], "UTF-8") + "\n"         
-
-corpusVocabC = NTCS.n_t_c_s(corpusContent)
-documrntsMatrix = list(corpusVocabC.values())
-fileWriter.my_file_writer(myTokenizedPath+"0_corpusVocabC.voc", corpusVocabC)
-
-
-### tf creator
-for fileNum in tqdm(range(len(txtFileList))):    
-    fileContent = fileReader.my_file_reader(txtFileList[fileNum], "UTF-8")
-
-    sorted_dic = NTCS.n_t_c_s(fileContent)
+corpusTfIdfJson = []
+for rowKeys in tqdm(range(corpusLen)):    
+    corpusTfIdfJson.append(tf_idf_dicCreator.my_TF_IDF(corpusTfJson[rowKeys], list(corpusTokens.values())))
     
-    fileName = txtFileList[fileNum].split(myCorpusPath)
-    fileName = fileName[1].split(".txt")
-    
-    fileWriter.my_file_writer(myTokenizedPath+fileName[0]+".tok", sorted_dic)
-
-    file_tf = tf_idf_dicCreator.my_TF(corpusVocabC, sorted_dic)
-    documrntsMatrix = np.vstack((documrntsMatrix, list(file_tf.values())))
-    fileWriter.my_file_writer(myTF_path+fileName[0]+".TF", file_tf)
-  
-myDF = tf_idf_dicCreator.my_DF(documrntsMatrix)
-file_tf_idf = tf_idf_dicCreator.my_TF_IDF(documrntsMatrix, myDF)
 
 
-for fileNum in tqdm(range(len(txtFileList))):  
-    row_tf_idf =file_tf_idf[fileNum,:]
-    
-    fileName = txtFileList[fileNum].split(myCorpusPath)
-    fileName = fileName[1].split(".txt")
-    fileWriter.my_file_line_writer(myTF_IDF_path+fileName[0]+".TfIdf", row_tf_idf)
- 
-for fileNum in range(len(txtFileList)):
-    doc1 = "1"
-    #doc2 = "10"  
-    
-    fileName = txtFileList[fileNum].split(myCorpusPath)
-    fileName = fileName[1].split(".txt")
-    
-    vecSim = vectorSimilarity.cos_sim_vectors(myTF_path+doc1+".TF", myTF_path+fileName[0]+".TF")
-    print("similarity Doc01 and Doc"+fileName[0]+" By Just TF is: ",vecSim)
-    
-    vecSim = vectorSimilarity.cos_sim2_vectors(myTF_IDF_path+doc1+".TfIdf", myTF_IDF_path+fileName[0]+".TfIdf")
-    print("similarity Doc01 and Doc"+fileName[0]+" By TF_IDF is: ",vecSim)
-    print("=================================")
+corpusSimilarity = [[] for i in range(corpusLen)]
+for rowKeys in tqdm(range(corpusLen)):  
+    similarityTf    = vectorSimilarity.cos_sim_vectors(corpusTfJson[0], corpusTfJson[rowKeys])
+    similarityTfIdf = vectorSimilarity.cos_sim_vectors(corpusTfIdfJson[0], corpusTfIdfJson[rowKeys])
+    corpusSimilarity[rowKeys].append(similarityTf)
+    corpusSimilarity[rowKeys].append(similarityTfIdf)
 
-'''
+
 endTime = datetime.datetime.now()
 totalTime = endTime - startTime
 
 print(" --- FINISHED in ",totalTime.total_seconds()," seconds --- ")
 
-with open('objs.pkl', 'wb') as f:
-    pickle.dump([corpusContentJson, corpusTokens],f)
-    
+
+with open('corpusContentJson.pkl', 'wb') as f:
+    pickle.dump([corpusContentJson],f)
+with open('corpusTokens.pkl', 'wb') as f:
+    pickle.dump([corpusTokens],f)    
+with open('corpusTfJson.pkl', 'wb') as f:
+    pickle.dump([corpusTfJson],f)
+with open('corpusTfIdfJson.pkl', 'wb') as f:
+    pickle.dump([corpusTfIdfJson],f)
+with open('corpusSimilarity.pkl', 'wb') as f:
+    pickle.dump([corpusSimilarity],f)
