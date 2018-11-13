@@ -1,29 +1,17 @@
-import numpy as np
-
-
 def my_TF(mainDic, axDic):
-    tmpDic = {}
+    tmpDic = []
     for i in mainDic:    
         if i in axDic:
-            tmpDic[i] = axDic.get(i)
+            tmpDic.append(axDic.get(i))
         else:
-            tmpDic[i] = 0
+            tmpDic.append(0)
+            
     return tmpDic
-
-def my_DF(mainDic):
-    [row, col] = (mainDic.shape)
-    df = np.zeros(col).astype(int)    
-    for i in range(col):
-        for j in range(1, row):
-            if int(mainDic[j, i]) > 0:
-                df[i] = df[i]+1
-    return df 
 
 
 def my_TF_IDF(mainDic, axDic):
-    mainDic = np.array(mainDic).astype(float)
-    [row, col] = (mainDic.shape)
-    for i in range(row):
-        mainDic[i,:] = mainDic[i,:]/axDic
+    tmpDic = []
+    for i in range(len(mainDic)):
+        tmpDic.append(mainDic[i]/axDic[i])
     
-    return mainDic[1:row,:]
+    return tmpDic
